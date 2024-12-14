@@ -152,15 +152,6 @@ public class TipoMesa implements Serializable {
     }
 
     /**
-     * Obtiene la lista de mesas que pertenecen a este tipo.
-     * 
-     * @return La lista de mesas del tipo.
-     */
-    public List<Mesa> getMesas() {
-        return mesas;
-    }
-
-    /**
      * Devuelve el nombre descriptivo del tipo de mesa
      * @return El nombre de la mesa
      */

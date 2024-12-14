@@ -35,17 +35,17 @@ public class ReservacionDTO implements Serializable {
     /**
      * Estado de la reservación.
      */
-    private String estado; // Estado como String, se podría convertir a Enum si se requiere
+    private EstadoReservacionDTO estado; // Estado como String, se podría convertir a Enum si se requiere
 
     /**
      * Identificador de la mesa asociada a la reservación.
      */
-    private Long mesaId;
+    private MesaDTO mesaId;
 
     /**
      * Identificador del cliente asociado a la reservación.
      */
-    private Long clienteId;
+    private ClienteDTO cliente;
 
     /**
      * Monto total de la reservación.
@@ -57,34 +57,21 @@ public class ReservacionDTO implements Serializable {
      */
     private LocalDateTime fechaHoraRegistro;
 
+    
     /**
      * Constructor vacío, inicializa un nuevo objeto ReservacionDTO.
      */
     public ReservacionDTO() {
+    
     }
-
+    
     /**
-     * Constructor que inicializa un nuevo objeto ReservacionDTO con los parámetros especificados.
-     * 
-     * @param id el identificador único de la reservación
-     * @param fechaHora la fecha y hora de la reservación
-     * @param numeroPersonas el número de personas para la reservación
-     * @param estado el estado de la reservación
-     * @param mesaId el identificador de la mesa asociada
-     * @param clienteId el identificador del cliente que realizó la reservación
-     * @param montoTotal el monto total a pagar por la reservación
-     * @param fechaHoraRegistro la fecha y hora de registro de la reservación
+     * Crea una instancia de reservacion DTO usada para consultas por ID.
+     * @param id ID de la reservacion.
      */
-    public ReservacionDTO(Long id, LocalDateTime fechaHora, Integer numeroPersonas, String estado, Long mesaId, Long clienteId, Float montoTotal, LocalDateTime fechaHoraRegistro) {
+    public ReservacionDTO(Long id) {
         this.id = id;
-        this.fechaHora = fechaHora;
-        this.numeroPersonas = numeroPersonas;
-        this.estado = estado;
-        this.mesaId = mesaId;
-        this.clienteId = clienteId;
-        this.montoTotal = montoTotal;
-        this.fechaHoraRegistro = fechaHoraRegistro;
-    }
+    } 
 
     /**
      * Obtiene el identificador único de la reservación.
@@ -145,7 +132,7 @@ public class ReservacionDTO implements Serializable {
      * 
      * @return el estado de la reservación
      */
-    public String getEstado() {
+    public EstadoReservacionDTO getEstado() {
         return estado;
     }
 
@@ -154,45 +141,46 @@ public class ReservacionDTO implements Serializable {
      * 
      * @param estado el estado de la reservación a establecer
      */
-    public void setEstado(String estado) {
+    public void setEstado(EstadoReservacionDTO estado) {
         this.estado = estado;
     }
 
-    /**
-     * Obtiene el identificador de la mesa asociada a la reservación.
+     /**
+     * Obtiene la mesa asociada a la reservación.
      * 
-     * @return el identificador de la mesa asociada a la reservación
+     * @return el objeto MesaDTO que representa la mesa asociada a la reservación
      */
-    public Long getMesaId() {
+    public MesaDTO getMesa() {
         return mesaId;
     }
 
     /**
-     * Establece el identificador de la mesa asociada a la reservación.
+     * Establece la mesa asociada a la reservación.
      * 
-     * @param mesaId el identificador de la mesa
+     * @param mesa el objeto MesaDTO que representa la mesa que se asignará a la reservación
      */
-    public void setMesaId(Long mesaId) {
-        this.mesaId = mesaId;
+    public void setMesa(MesaDTO mesa) {
+        this.mesaId = mesa;
     }
 
     /**
-     * Obtiene el identificador del cliente asociado a la reservación.
+     * Obtiene el cliente asociado a la reservación.
      * 
-     * @return el identificador del cliente
+     * @return el objeto ClienteDTO que representa el cliente asociado a la reservación
      */
-    public Long getClienteId() {
-        return clienteId;
+    public ClienteDTO getCliente() {
+        return cliente;
     }
 
     /**
-     * Establece el identificador del cliente asociado a la reservación.
+     * Establece el cliente asociado a la reservación.
      * 
-     * @param clienteId el identificador del cliente
+     * @param cliente el objeto ClienteDTO que representa el cliente que se asignará a la reservación
      */
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
+    public void setCliente(ClienteDTO cliente) {
+        this.cliente = cliente;
     }
+
 
     /**
      * Obtiene el monto total de la reservación.
@@ -249,6 +237,6 @@ public class ReservacionDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ReservacionDTO{id=" + id + ", fechaHora=" + fechaHora + ", numeroPersonas=" + numeroPersonas + ", estado='" + estado + "'}";
+        return "ReservacionDTO{id=" + id + ", fechaHora=" + fechaHora + ", numeroPersonas=" + numeroPersonas + ", estado='" + getEstado() + "'}";
     }
 }
