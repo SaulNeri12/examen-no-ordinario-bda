@@ -34,5 +34,7 @@ public class Persistencia {
         } catch (DAOException ex) {
             System.out.println(ex.getMessage());
         }
+        
+        
     }
 }
