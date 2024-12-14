@@ -14,6 +14,7 @@ import com.restaurante.persistencia.dao.interfaces.IClientesDAO;
 import com.restaurante.persistencia.entidades.Cliente;
 import com.restaurante.persistencia.excepciones.DAOException;
 import java.util.List;
+import javax.persistence.EntityManager;
 
 /**
  * Implementa los metodos de la interfaz IClientesBO, la cual nos proporciona
@@ -62,12 +63,23 @@ class ClientesBO implements IClientesBO {
 
     @Override
     public List<ClienteDTO> obtenerClientesTodos() throws BOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return this.clientesDAO.obtenerClientesTodos()
+                    .stream()
+                    .map(ClienteConvertidor::convertirADTO)
+                    .toList();
+            
+        } catch (DAOException ex) {
+            throw new BOException(ex.getMessage());
+        }
     }
 
     @Override
     public ClienteDTO obtenerClientePorTelefono(String numeroTelefono) throws BOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        try {
+            return ClienteConvertidor.convertirADTO(this.clientesDAO.obtenerClientePorTelefono(numeroTelefono));
+        } catch (DAOException ex) {
+            throw new BOException(ex.getMessage());
+        }
     }
-
 }
