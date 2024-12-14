@@ -6,7 +6,7 @@
 package com.restaurante.persistencia.excepciones;
 
 /**
- *
+ * Excepcion usada para manejar errores de los DAOs de la persistencia.
  * @author Saul Neri
  */
 public class DAOException extends Exception {

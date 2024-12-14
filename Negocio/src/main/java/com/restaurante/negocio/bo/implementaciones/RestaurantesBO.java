@@ -18,14 +18,14 @@ import java.util.List;
  * en la base de datos.
  * @author Saul Neri
  */
-public class RestaurantesBO implements IRestaurantesBO {
+class RestaurantesBO implements IRestaurantesBO {
 
     private static IRestaurantesBO instancia;
     
     /**
      * DAO de restaurantes necesaria para el funcionamiento del BO.
      */
-    private IRestaurantesDAO restaurantes;
+    private final IRestaurantesDAO restaurantes;
 
     /**
      * Constructor privado necesario para la implementacion del singleon.

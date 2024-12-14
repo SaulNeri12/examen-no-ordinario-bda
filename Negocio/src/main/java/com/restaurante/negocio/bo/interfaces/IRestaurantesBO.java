@@ -6,7 +6,8 @@ import com.restaurante.negocio.excepciones.BOException;
 import java.util.List;
 
 /**
- * 
+ * Define los metodos necesarios para interacturar con la tabla de restaurantes
+ * en la base de datos.
  * @author neri
  */
 public interface IRestaurantesBO {

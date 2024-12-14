@@ -22,12 +22,16 @@ import javax.persistence.TypedQuery;
  */
 class RestaurantesDAO implements IRestaurantesDAO {
 
-    private static IRestaurantesDAO instancia;
+    private static RestaurantesDAO instancia;
 
     private RestaurantesDAO() {
     }
 
-    public static IRestaurantesDAO getInstance() {
+    /**
+     * Obtiene la instancia unica del DAO de restaurantes.
+     * @return Instancia unica (singleton)
+     */
+    public static RestaurantesDAO getInstance() {
         if (instancia == null) {
             instancia = new RestaurantesDAO();
         }
@@ -91,7 +95,6 @@ class RestaurantesDAO implements IRestaurantesDAO {
             entityManager.flush();
             transaction.commit();
         } catch (Exception e) {
-            
             if (transaction.isActive()) {
                 transaction.rollback();
             }
