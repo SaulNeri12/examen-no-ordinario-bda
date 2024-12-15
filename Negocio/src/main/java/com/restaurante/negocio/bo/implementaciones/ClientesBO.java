@@ -14,7 +14,6 @@ import com.restaurante.persistencia.dao.interfaces.IClientesDAO;
 import com.restaurante.persistencia.entidades.Cliente;
 import com.restaurante.persistencia.excepciones.DAOException;
 import java.util.List;
-import javax.persistence.EntityManager;
 
 /**
  * Implementa los metodos de la interfaz IClientesBO, la cual nos proporciona
@@ -23,6 +22,9 @@ import javax.persistence.EntityManager;
  */
 class ClientesBO implements IClientesBO {
 
+    /**
+     * Instancia unica necesaria para el singleton.
+     */
     private static ClientesBO instancia;
     
     /**
@@ -30,12 +32,15 @@ class ClientesBO implements IClientesBO {
      */
     private final IClientesDAO clientesDAO;
 
+    /**
+     * Constructor privado necesario para la implementacion del singleton.
+     */
     private ClientesBO() {
         this.clientesDAO = FabricaClientesDAO.obtenerClientesDAO();
     }
 
     /**
-     * Obtiene la instancia unica del DAO de clientes.
+     * Obtiene la instancia unica del BO de clientes.
      * @return Instancia unica (singleton)
      */
     public static ClientesBO getInstance() {
