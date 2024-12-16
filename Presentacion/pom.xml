@@ -13,6 +13,11 @@
         </dependency>
         
         <dependency>
+            <groupId>ch.codeblock.qrinvoice.itext5</groupId>
+            <artifactId>qrinvoice-itext5</artifactId>
+            <version>1.19</version>
+        </dependency>
+        <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
             <version>3.5.2</version>

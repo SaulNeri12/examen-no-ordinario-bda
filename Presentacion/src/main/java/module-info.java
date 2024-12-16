@@ -18,5 +18,6 @@ module Presentacion {
     requires java.logging;
     requires com.formdev.flatlaf;
     requires com.github.lgooddatepicker;
+    requires itextpdf;
     
 }

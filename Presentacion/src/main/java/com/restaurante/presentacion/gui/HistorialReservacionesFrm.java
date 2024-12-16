@@ -4,6 +4,15 @@
  */
 package com.restaurante.presentacion.gui;
 
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.restaurante.negocio.bo.implementaciones.FabricaClientesBO;
 import com.restaurante.negocio.bo.implementaciones.FabricaMesasBO;
 import com.restaurante.negocio.bo.implementaciones.FabricaReservacionesBO;
@@ -18,8 +27,13 @@ import com.restaurante.negocio.dtos.ReservacionDTO;
 import com.restaurante.negocio.dtos.RestauranteDTO;
 import com.restaurante.negocio.dtos.TipoMesaDTO;
 import com.restaurante.negocio.excepciones.BOException;
+import java.awt.Desktop;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Level;
@@ -187,7 +201,7 @@ public class HistorialReservacionesFrm extends javax.swing.JFrame {
             }
 
             final TipoMesaDTO tipoMesa;
-            
+
             /*
             Object seteado = this.tiposMesaComboBox.getSelectedItem();
             if (!seteado.equalsIgnoreCase("n/a")) {
@@ -203,10 +217,9 @@ public class HistorialReservacionesFrm extends javax.swing.JFrame {
                             .toList();
                 }
             }*/
-
             Object seteado = this.tiposMesaComboBox.getSelectedItem();
             if (seteado instanceof String && ((String) seteado).equalsIgnoreCase("n/a")) {
-                tipoMesa = null; 
+                tipoMesa = null;
             } else if (seteado instanceof TipoMesaDTO) {
                 tipoMesa = (TipoMesaDTO) seteado;
 
@@ -506,6 +519,76 @@ public class HistorialReservacionesFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_tiposMesaComboBoxActionPerformed
 
     private void generarReporteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarReporteBtnActionPerformed
+        try {
+            // Configuración inicial
+            String filePath = "ReporteCadenaRestaurante.pdf";
+            Document document = new Document(PageSize.A4);
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            // Fuentes para el documento
+            Font fontTitulo = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            Font fontSubTitulo = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.ITALIC);
+            Font fontContenido = new Font(Font.FontFamily.TIMES_ROMAN, 10, Font.NORMAL);
+
+            // Título del reporte
+            document.add(new Paragraph("Reporte - Historial Reservaciones", fontTitulo));
+            document.add(Chunk.NEWLINE); // Espacio en blanco
+
+            // Información del restaurante
+            document.add(new Paragraph("Restaurante:", fontSubTitulo));
+            document.add(new Paragraph(
+                    String.format("\tNombre: %s\n\tDirección: %s\n\tTeléfono: %s",
+                            restaurante.getNombre(),
+                            restaurante.getDireccion(),
+                            restaurante.getTelefono()),
+                    fontContenido));
+            document.add(Chunk.NEWLINE); // Espacio en blanco
+
+            // Filtro de tipo de mesa
+            Object seleccionado = tiposMesaComboBox.getSelectedItem();
+            if (seleccionado instanceof TipoMesaDTO tipoMesa) {
+                document.add(new Paragraph("Filtro aplicado:", fontSubTitulo));
+                document.add(new Paragraph("Tipo de Mesa: " + tipoMesa.getNombre(), fontContenido));
+                document.add(Chunk.NEWLINE); // Espacio en blanco
+            }
+
+            // Crear la tabla con encabezados
+            PdfPTable table = new PdfPTable(tablaReservaciones.getColumnCount());
+            table.setWidthPercentage(100);
+            for (int i = 0; i < tablaReservaciones.getColumnCount(); i++) {
+                table.addCell(new Paragraph(tablaReservaciones.getColumnName(i), fontSubTitulo));
+            }
+
+            // Llenar la tabla con datos
+            for (int row = 0; row < tablaReservaciones.getRowCount(); row++) {
+                for (int col = 0; col < tablaReservaciones.getColumnCount(); col++) {
+                    Object value = tablaReservaciones.getValueAt(row, col);
+                    table.addCell(new Paragraph(value != null ? value.toString() : "", fontContenido));
+                }
+            }
+
+            document.add(table);
+            document.close();
+
+            // Confirmación y apertura del PDF
+            JOptionPane.showMessageDialog(this, "El PDF se ha generado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            Desktop.getDesktop().open(new File(filePath));
+        } catch (FileNotFoundException | DocumentException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se pudo generar el reporte de reservas, por favor intente más tarde.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "No se pudo abrir el archivo PDF generado.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
 
     }//GEN-LAST:event_generarReporteBtnActionPerformed
 
