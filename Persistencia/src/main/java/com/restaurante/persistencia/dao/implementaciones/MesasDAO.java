@@ -207,12 +207,9 @@ class MesasDAO implements IMesasDAO {
             query.setParameter("idRestaurante", idRestaurante);
             query.setParameter("fechaActual", fechaActual);
 
-            // Impresión de depuración
-            System.out.println("ID del Restaurante: " + idRestaurante);
-            System.out.println("Fecha actual para comparación: " + fechaActual);
 
             List<Mesa> mesasDisponibles = query.getResultList();
-            System.out.println("Mesas disponibles encontradas: " + mesasDisponibles.size());
+            
 
             return mesasDisponibles;
         } catch (NoResultException e) {
@@ -236,5 +233,28 @@ class MesasDAO implements IMesasDAO {
         int numeroRandom = ThreadLocalRandom.current().nextInt(0, 999);
         codigoMesa = String.format("%3s-%d-%03d", ubicacion.toString().substring(0, 3), tipo.getMaximoPersonas(), numeroRandom);
         return codigoMesa;
+    }
+
+    @Override
+    public Mesa obtenerMesaPorCodigo(Long idRestaurante, String codigo) throws DAOException {
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
+
+        try {
+            Mesa mesa = entityManager.createQuery(
+                    "SELECT m FROM Mesa m WHERE m.restaurante.id = :idRestaurante AND m.codigo = :codigo",
+                    Mesa.class
+            )
+            .setParameter("idRestaurante", idRestaurante)
+            .setParameter("codigo", codigo)
+            .getSingleResult();
+             
+            return mesa;
+        } catch (NoResultException ex) {
+            return null;
+        } catch (Exception e) {
+            throw new DAOException("Error al obtener todas las mesas");
+        } finally {
+            entityManager.close(); 
+        }
     }
 }

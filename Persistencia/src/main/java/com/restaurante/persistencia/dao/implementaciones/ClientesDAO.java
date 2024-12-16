@@ -5,6 +5,7 @@
 package com.restaurante.persistencia.dao.implementaciones;
 
 import com.restaurante.persistencia.conexion.Conexion;
+import com.restaurante.persistencia.cripto.CifradoAES;
 import com.restaurante.persistencia.dao.interfaces.IClientesDAO;
 import com.restaurante.persistencia.entidades.Cliente;
 import com.restaurante.persistencia.excepciones.DAOException;
@@ -20,9 +21,16 @@ import javax.persistence.NoResultException;
  */
 class ClientesDAO implements IClientesDAO {
 
+    /**
+     * Instancia unica necesaria para la implementacion del singleton.
+     */
     private static ClientesDAO instancia;
 
+    /**
+     * Constructor privado necesario para la implementacion del singleton.
+     */
     private ClientesDAO() {
+
     }
 
     /**
@@ -46,6 +54,8 @@ class ClientesDAO implements IClientesDAO {
             transaction.begin();
 
             for (Cliente cliente : clientes) {
+                String telefonoEncriptado = CifradoAES.encriptar(cliente.getTelefono());
+                cliente.setTelefono(telefonoEncriptado);
                 entityManager.persist(cliente);
             }
             entityManager.flush();
@@ -53,6 +63,7 @@ class ClientesDAO implements IClientesDAO {
             transaction.commit();
 
         } catch (Exception e) {
+            System.out.println("### ERROR DAO CLIENTES: " + e.getMessage());
             throw new DAOException("Error al insertar clientes de manera masiva.");
         } finally {
             entityManager.close();
@@ -64,7 +75,25 @@ class ClientesDAO implements IClientesDAO {
         EntityManager em = Conexion.getInstance().crearConexion();
 
         try {
-            return em.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
+            List<Cliente> clientes = em.createQuery("SELECT c FROM Cliente c", Cliente.class)
+                    .getResultList()
+                    .stream()
+                    .map(cl -> {
+                        String telefonoEncriptado;
+
+                        try {
+                            telefonoEncriptado = CifradoAES.desencriptar(cl.getTelefono());
+                        } catch (Exception ex) {
+                            telefonoEncriptado = "N/A";
+                        }
+
+                        cl.setTelefono(telefonoEncriptado);
+
+                        return cl;
+                    })
+                    .toList();
+
+            return clientes;
         } catch (Exception ex) {
             throw new DAOException("Error al intentar obtener los clientes registrados en el sistema, porfavor intente mas tarde");
         }
@@ -75,9 +104,13 @@ class ClientesDAO implements IClientesDAO {
         EntityManager em = Conexion.getInstance().crearConexion();
 
         try {
-            return em.createQuery("SELECT c FROM Cliente c WHERE c.telefono = :telefono", Cliente.class)
-                    .setParameter("telefono", numeroTelefono)
+            Cliente cliente = em.createQuery("SELECT c FROM Cliente c WHERE c.telefono = :telefono", Cliente.class)
+                    .setParameter("telefono", CifradoAES.encriptar(numeroTelefono))
                     .getSingleResult();
+
+            cliente.setTelefono(CifradoAES.encriptar(numeroTelefono));
+
+            return cliente;
         } catch (NoResultException ex) {
             throw new DAOException("No se encontro al cliente con el numero de telefono especificado.");
         } catch (Exception ex) {

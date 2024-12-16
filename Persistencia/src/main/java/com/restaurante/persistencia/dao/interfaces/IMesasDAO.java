@@ -42,6 +42,15 @@ public interface IMesasDAO {
     public List<Mesa> obtenerMesasPorTipo(Long idRestaurante, TipoMesa tipo) throws DAOException;
     
     /**
+     * Obtiene la mesa con el codigo especificado en el restaurante dado.
+     * @param idRestaurante ID del restaurante al cual pertenece la mesa.
+     * @param codigo Codigo de la mesa a buscar.
+     * @return Mesa
+     * @throws DAOException Si ocurre un error en la consulta.
+     */
+    public Mesa obtenerMesaPorCodigo(Long idRestaurante, String codigo) throws DAOException;
+    
+    /**
      * Inserta de manera "masiva" el numero dado de mesas con el tipo y
      * ubicacion especifica.
      * @param idRestautante ID del restaurante donde se agregaran las mesas

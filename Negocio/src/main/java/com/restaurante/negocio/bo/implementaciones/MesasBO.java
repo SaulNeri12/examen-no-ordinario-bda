@@ -153,4 +153,17 @@ class MesasBO implements IMesasBO {
             throw new BOException(ex.getMessage());
         }
     }
+
+    @Override
+    public MesaDTO obtenerMesaPorCodigo(Long idRestaurante, String codigo) throws BOException {
+        try {
+            MesaDTO mesa = MesaConvertidor.convertirADTO(this.mesasDAO.obtenerMesaPorCodigo(idRestaurante, codigo));
+            if (mesa == null) {
+                throw new DAOException("No se encontró la mesa a buscar por código.");
+            }
+            return mesa;
+        } catch (DAOException ex) {
+            throw new BOException(ex.getMessage());
+        }
+    }
 }

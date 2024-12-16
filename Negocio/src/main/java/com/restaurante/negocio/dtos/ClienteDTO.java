@@ -120,4 +120,8 @@ public class ClienteDTO implements Serializable {
         ClienteDTO other = (ClienteDTO) obj;
         return (id != null && id.equals(other.id));
     }
+    
+    public String toString() {
+        return String.format("%s, %s", this.nombreCompleto, this.telefono);
+    }       
 }
