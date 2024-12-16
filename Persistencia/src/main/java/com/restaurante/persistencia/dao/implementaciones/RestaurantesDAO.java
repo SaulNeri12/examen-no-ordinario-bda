@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package com.restaurante.persistencia.dao.implementaciones;
 
 import com.restaurante.persistencia.conexion.Conexion;
@@ -13,11 +8,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-
+import org.eclipse.persistence.exceptions.DatabaseException;
 
 /**
  * Implementa los metodos definidos por IRestaurantesDAO
+ *
  * @author Saul Neri
  */
 class RestaurantesDAO implements IRestaurantesDAO {
@@ -29,6 +26,7 @@ class RestaurantesDAO implements IRestaurantesDAO {
 
     /**
      * Obtiene la instancia unica del DAO de restaurantes.
+     *
      * @return Instancia unica (singleton)
      */
     public static RestaurantesDAO getInstance() {
@@ -37,7 +35,7 @@ class RestaurantesDAO implements IRestaurantesDAO {
         }
         return instancia;
     }
-    
+
     @Override
     public List<Restaurante> obtenerRestaurantesTodos() throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
@@ -70,7 +68,7 @@ class RestaurantesDAO implements IRestaurantesDAO {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
         try {
             TypedQuery<Restaurante> query = entityManager.createQuery(
-                "SELECT r FROM Restaurante r WHERE r.telefono = :telefono", Restaurante.class);
+                    "SELECT r FROM Restaurante r WHERE r.telefono = :telefono", Restaurante.class);
             query.setParameter("telefono", numeroTelefono);
             return query.getSingleResult();
         } catch (NoResultException e) {
@@ -86,35 +84,125 @@ class RestaurantesDAO implements IRestaurantesDAO {
     @Override
     public void agregarRestaurante(Restaurante restaurante) throws DAOException {
         EntityManager entityManager = Conexion.getInstance().crearConexion();
-        
+
         EntityTransaction transaction = entityManager.getTransaction();
-        
+
         try {
+
+            boolean telefonoEnUso = entityManager.createQuery(
+                    "SELECT COUNT(r) FROM Restaurante r WHERE r.telefono = :telefono", Long.class)
+                    .setParameter("telefono", restaurante.getTelefono())
+                    .getSingleResult() > 0;
+
+            if (telefonoEnUso) {
+                throw new DAOException("El número de teléfono ya está en uso por otro restaurante.");
+            }
+
+            boolean direccionEnUso = entityManager.createQuery(
+                    "SELECT COUNT(r) FROM Restaurante r WHERE r.direccion = :direccion", Long.class)
+                    .setParameter("direccion", restaurante.getDireccion())
+                    .getSingleResult() > 0;
+
+            if (direccionEnUso) {
+                throw new DAOException("La dirección ya está en uso por otro restaurante.");
+            }
+
             transaction.begin();
             entityManager.persist(restaurante);
             entityManager.flush();
             transaction.commit();
-        } catch (Exception e) {
+        } catch (PersistenceException ex) {
+            //System.out.println("### error: %s".formatted(ex.getClass().getSimpleName()));
             if (transaction.isActive()) {
                 transaction.rollback();
             }
-            
+
             throw new DAOException("Error al intentar guardar un nuevo restaurante, porfavor intente mas tarde.");
         } finally {
             if (entityManager.isOpen()) {
                 entityManager.close();
             }
         }
-        
+
     }
 
     @Override
     public void actualizarRestaurante(Restaurante restaurante) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            boolean noExiste = entityManager.createQuery("SELECT COUNT(r) FROM Restaurante r WHERE r.id = :idRestaurante", Long.class)
+                    .setParameter("idRestaurante", restaurante.getId())
+                    .getSingleResult() == 0;
+
+            if (noExiste) {
+                throw new DAOException("El restaurante no existe.");
+            }
+
+            boolean telefonoEnUso = entityManager.createQuery(
+                    "SELECT COUNT(r) FROM Restaurante r WHERE r.telefono = :telefono AND r.id != :idRestaurante", Long.class)
+                    .setParameter("telefono", restaurante.getTelefono())
+                    .setParameter("idRestaurante", restaurante.getId())
+                    .getSingleResult() > 0;
+
+            if (telefonoEnUso) {
+                throw new DAOException("El número de teléfono ya está en uso por otro restaurante.");
+            }
+
+            boolean direccionEnUso = entityManager.createQuery(
+                    "SELECT COUNT(r) FROM Restaurante r WHERE r.direccion = :direccion AND r.id != :idRestaurante", Long.class)
+                    .setParameter("direccion", restaurante.getDireccion())
+                    .setParameter("idRestaurante", restaurante.getId())
+                    .getSingleResult() > 0;
+
+            if (direccionEnUso) {
+                throw new DAOException("La dirección ya está en uso por otro restaurante.");
+            }
+
+            transaction.begin();
+            entityManager.merge(restaurante);
+            transaction.commit();
+        } catch (PersistenceException e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+
+            throw new DAOException("No se pudo actualizar la información debido a un error, porfavor intente mas tarde.");
+        } finally {
+            if (entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
     }
 
     @Override
     public void eliminarRestaurante(Long idRestaurante) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        try {
+            Restaurante encontrado = entityManager.createQuery("SELECT r FROM Restaurante r WHERE r.id = :idRestaurante", Restaurante.class)
+                    .setParameter("idRestaurante", idRestaurante)
+                    .getSingleResult();
+
+            if (encontrado == null) {
+                throw new DAOException("El restaurante que se intenta eliminar no existe.");
+            }
+
+            transaction.begin();
+            entityManager.remove(encontrado);
+            transaction.commit();
+        } catch (PersistenceException e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+
+            throw new DAOException("No se pudo eliminar el restaurante debido a un error, porfavor intente mas tarde.");
+        } finally {
+            if (entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
     }
 }
