@@ -23,6 +23,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -50,6 +52,31 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         //Estilo.prepararEstilo();
         this.cargarInfoRestaurante();
         this.cargarMesasDisponibles();
+        
+        this.horaAperturaTimePicker.addTimeChangeListener(t -> {
+            if (horaCierreTimePicker.getTime().isBefore(t.getNewTime())) {
+                horaAperturaTimePicker.setTime(t.getOldTime());
+                JOptionPane.showMessageDialog(
+                        null,
+                        "La hora de cierre es anterior a la hora de apertura.", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+        
+        this.horaCierreTimePicker.addTimeChangeListener(t -> {
+            if (horaAperturaTimePicker.getTime().isAfter(t.getNewTime())) {
+                horaCierreTimePicker.setTime(t.getOldTime());
+                JOptionPane.showMessageDialog(
+                        null,
+                        "La hora de cierre es anterior a la hora de apertura.", 
+                        "Error", 
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
+        
     }
 
     private void cargarInfoRestaurante() {
@@ -841,12 +868,29 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
                 throw new IllegalArgumentException("El número de telefono especificado es incorrecto");
             }
 
+            if (horaCierre.isBefore(horaApertura)) {
+                this.horaAperturaTimePicker.setTime(restaurante.getHoraApertura());
+                this.horaCierreTimePicker.setTime(restaurante.getHoraCierre());
+                throw new IllegalArgumentException("La hora de cierre es anterior a la fecha de apertura");
+            }
+            
             restaurante.setDireccion(direccion);
             restaurante.setTelefono(telefono);
             restaurante.setHoraCierre(horaCierre);
             restaurante.setHoraApertura(horaApertura);
+            
+            this.restaurantesBO.actualizarRestaurante(restaurante);
 
+            JOptionPane.showMessageDialog(
+                    null, 
+                    "La información del restaurante fué actualizada.", 
+                    "Actualizar Info", 
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            
         } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (BOException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }

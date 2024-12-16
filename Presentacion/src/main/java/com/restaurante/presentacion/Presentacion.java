@@ -4,8 +4,11 @@
 package com.restaurante.presentacion;
 
 import com.restaurante.negocio.bo.implementaciones.FabricaRestaurantesBO;
+import com.restaurante.negocio.bo.implementaciones.FabricaTiposMesaBO;
 import com.restaurante.negocio.bo.interfaces.IRestaurantesBO;
+import com.restaurante.negocio.bo.interfaces.ITiposMesaBO;
 import com.restaurante.negocio.dtos.RestauranteDTO;
+import com.restaurante.negocio.dtos.TipoMesaDTO;
 import com.restaurante.negocio.excepciones.BOException;
 import com.restaurante.presentacion.gui.InformacionRestaurante;
 import com.restaurante.presentacion.gui.MenuPrincipalFrm;
@@ -29,6 +32,56 @@ public class Presentacion {
         CONFIGURADO.
          */
         IRestaurantesBO restaurantesBO = FabricaRestaurantesBO.obtenerRestaurantesBO();
+        ITiposMesaBO tiposMesaBO = FabricaTiposMesaBO.obtenerTiposMesaBO();
+
+        List<TipoMesaDTO> tiposMesa;
+        try {
+            tiposMesa = tiposMesaBO.obtenerTiposMesaTodos();
+
+            if (tiposMesa.isEmpty()) {
+                throw new BOException("No hay tipos de mesa");
+            }
+        } catch (BOException ex) {
+            TipoMesaDTO t = new TipoMesaDTO();
+            t.setNombre("Pequeña");
+            t.setPrecio(300.f);
+            t.setMaximoPersonas(2);
+            t.setMinimoPersonas(1);
+
+            try {
+                tiposMesaBO.agregarTipoMesa(t);
+                System.out.println("%s agregada!".formatted(t.getNombre()));
+            } catch (BOException ex1) {
+                System.out.println(ex.getMessage());
+            }
+
+            t = new TipoMesaDTO();
+            t.setNombre("Mediana");
+            t.setPrecio(500.f);
+            t.setMaximoPersonas(4);
+            t.setMinimoPersonas(3);
+
+            try {
+                tiposMesaBO.agregarTipoMesa(t);
+                System.out.println("%s agregada!".formatted(t.getNombre()));
+            } catch (BOException ex2) {
+                System.out.println(ex.getMessage());
+            }
+
+            t = new TipoMesaDTO();
+            t.setNombre("Grande");
+            t.setPrecio(700.f);
+            t.setMaximoPersonas(8);
+            t.setMinimoPersonas(5);
+
+            try {
+                tiposMesaBO.agregarTipoMesa(t);
+                System.out.println("%s agregada!".formatted(t.getNombre()));
+            } catch (BOException ex3) {
+                System.out.println(ex.getMessage());
+            }
+        }
+
         RestauranteDTO restaurante;
 
         try {
@@ -56,7 +109,7 @@ public class Presentacion {
             restaurante.setDireccion("Calle Z #9002, Colonia Valle Verde");
             restaurante.setHoraApertura(LocalTime.of(9, 0));
             restaurante.setHoraCierre(LocalTime.of(20, 30));
-            restaurante.setTelefono("100-111-222");
+            restaurante.setTelefono("6420104377");
 
             try {
                 // Insertar el nuevo restaurante en el sistema

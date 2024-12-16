@@ -179,7 +179,7 @@ public class CancelarReservacionFrm extends javax.swing.JFrame {
                     r.getEstado().toString(),
                     r.getMesa().getUbicacion().toString(),
                     r.getFechaHora(),
-                    r.getFechaHoraRegistro().toString()
+                    r.getFechaHoraRegistro()
                 });
             }
 
