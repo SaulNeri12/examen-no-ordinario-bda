@@ -390,7 +390,7 @@ public class CrearReservacionFrm extends javax.swing.JFrame {
 
         int cantidadPersonas = (Integer) this.cantidadPersonasSpinner.getValue();
 
-        int opcion = JOptionPane.showConfirmDialog(this, "Desea completar la reservacion?", "Realizar Reservacion", JOptionPane.YES_NO_OPTION);
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Desea completar la reservacion?", "Realizar Reservacion", JOptionPane.YES_NO_OPTION);
         if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
             return;
         }

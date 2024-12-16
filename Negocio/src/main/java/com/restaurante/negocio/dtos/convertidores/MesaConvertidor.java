@@ -43,6 +43,8 @@ public class MesaConvertidor {
             dto.setRestaurante(RestauranteConvertidor.convertirADTO(entity.getRestaurante()));
         }
 
+        dto.setFechaNuevaDisponibilidad(entity.getFechaNuevaDisponibilidad());
+        
         return dto;
     }
 
@@ -72,6 +74,8 @@ public class MesaConvertidor {
         if (dto.getRestaurante() != null) {
             entity.setRestaurante(RestauranteConvertidor.convertirAEntidad(dto.getRestaurante()));
         }
+        
+        entity.setFechaNuevaDisponibilidad(dto.getFechaNuevaDisponibilidad());
 
         return entity;
     }

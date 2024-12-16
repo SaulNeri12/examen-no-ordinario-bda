@@ -18,6 +18,7 @@ import com.restaurante.negocio.dtos.UbicacionMesaDTO;
 import com.restaurante.negocio.excepciones.BOException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
@@ -135,6 +136,7 @@ public class AdminMesasFrm extends javax.swing.JFrame {
             model.addColumn("Nueva Disponibilidad");
 
             for (MesaDTO mesa : mesas) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
                 model.addRow(new Object[]{
                     mesa.getCodigo(),
@@ -142,8 +144,19 @@ public class AdminMesasFrm extends javax.swing.JFrame {
                     mesa.getTipoMesa().getMinimoPersonas(),
                     mesa.getTipoMesa().getMaximoPersonas(),
                     mesa.getUbicacion().toString(),
-                    mesa.getFechaNuevaDisponibilidad()
+                    (mesa.getFechaNuevaDisponibilidad() != null)
+                    ? mesa.getFechaNuevaDisponibilidad().format(formatter)
+                    : ""
                 });
+                /*
+                model.addRow(new Object[]{
+                    mesa.getCodigo(),
+                    mesa.getTipoMesa().getNombre(),
+                    mesa.getTipoMesa().getMinimoPersonas(),
+                    mesa.getTipoMesa().getMaximoPersonas(),
+                    mesa.getUbicacion().toString(),
+                    (mesa.getFechaNuevaDisponibilidad() != null) ? mesa.getFechaNuevaDisponibilidad() : ""
+                });*/
             }
 
             this.tablaMesas.setModel(model);
@@ -369,9 +382,9 @@ public class AdminMesasFrm extends javax.swing.JFrame {
     private void eliminarMesaBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarMesaBtnActionPerformed
 
         int opcion = JOptionPane.showConfirmDialog(
-                this, 
+                this,
                 "Se eliminará la mesa con el código %s. ¿Desea continuar con la operación?".formatted(this.codigoMesa),
-                "Eliminar Mesa", 
+                "Eliminar Mesa",
                 JOptionPane.YES_NO_OPTION
         );
         if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
@@ -387,7 +400,7 @@ public class AdminMesasFrm extends javax.swing.JFrame {
                     "Eliminar Mesa",
                     JOptionPane.INFORMATION_MESSAGE
             );
-            
+
             this.cargarMesas();
         } catch (BOException ex) {
             JOptionPane.showMessageDialog(
@@ -400,17 +413,17 @@ public class AdminMesasFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_eliminarMesaBtnActionPerformed
 
     private void eliminarTodasBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarTodasBtnActionPerformed
-        
+
         int opcion = JOptionPane.showConfirmDialog(
-                this, 
+                this,
                 "Se eliminarán TODAS las mesas registradas en el sistema. ¿Desea continuar con la operación?",
-                "Eliminar Mesas Sistema", 
+                "Eliminar Mesas Sistema",
                 JOptionPane.YES_NO_OPTION
         );
         if (opcion == JOptionPane.NO_OPTION || opcion == JOptionPane.CLOSED_OPTION) {
             return;
         }
-        
+
         String confirmar = JOptionPane.showInputDialog(this, "Escriba 'Aceptar' para continuar con la acción");
         if (confirmar == null || !confirmar.equalsIgnoreCase("aceptar")) {
             JOptionPane.showMessageDialog(
@@ -421,10 +434,10 @@ public class AdminMesasFrm extends javax.swing.JFrame {
             );
             return;
         }
-        
+
         try {
             List<MesaDTO> mesasTodas = this.mesasBO.obtenerMesasTodas(restaurante.getId());
-            
+
             mesasTodas.forEach(mesa -> {
                 try {
                     mesasBO.eliminarMesa(restaurante.getId(), mesa.getCodigo());
@@ -432,16 +445,16 @@ public class AdminMesasFrm extends javax.swing.JFrame {
                     // no hace nada...
                 }
             });
-            
+
             JOptionPane.showMessageDialog(
                     this,
                     "Se eliminaron todas las mesas en el sistema",
                     "Eliminar Mesas Sistema",
                     JOptionPane.INFORMATION_MESSAGE
             );
-            
+
             this.cargarMesas();
-            
+
         } catch (BOException ex) {
             JOptionPane.showMessageDialog(
                     this,
