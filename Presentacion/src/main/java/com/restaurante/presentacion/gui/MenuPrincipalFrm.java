@@ -6,12 +6,17 @@ package com.restaurante.presentacion.gui;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+import com.restaurante.negocio.bo.implementaciones.FabricaClientesBO;
 import com.restaurante.negocio.bo.implementaciones.FabricaRestaurantesBO;
+import com.restaurante.negocio.bo.interfaces.IClientesBO;
 import com.restaurante.negocio.bo.interfaces.IRestaurantesBO;
+import com.restaurante.negocio.dtos.ClienteDTO;
 import com.restaurante.negocio.dtos.RestauranteDTO;
 import com.restaurante.negocio.excepciones.BOException;
 import java.awt.Color;
+import java.util.List;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -26,6 +31,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
 
     private RestauranteDTO restaurante = InformacionRestaurante.getInstance().getRestaurante();
     private IRestaurantesBO restaurantesBO = FabricaRestaurantesBO.obtenerRestaurantesBO();
+    private IClientesBO clientesBO = FabricaClientesBO.obtenerClientesDAO();
 
     private Timer timerActualizarInfoRestaurante;
 
@@ -301,7 +307,144 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu5ActionPerformed
 
     private void menuClientesInsercionMasivaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuClientesInsercionMasivaActionPerformed
-        // TODO add your handling code here:
+        
+        boolean clientesRegistrados = false;
+        try {
+            clientesRegistrados = this.clientesBO.obtenerClientesTodos().size() > 0;
+        } catch (BOException ex) {
+            JOptionPane.showMessageDialog(
+                this, 
+                "No se pudo conectar con la base de datos debido a un error, porfavor intentelo de nuevo más tarde.", 
+                "Error - Insercion Masiva", 
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+        
+        if (clientesRegistrados) {
+            return;
+        }
+        
+        List<ClienteDTO> lista = new ArrayList<>();
+
+        ClienteDTO c = new ClienteDTO();
+
+        c.setNombreCompleto("Miguel Pedro Martinez Quiroz");
+        c.setTelefono("453-902-343");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("María Fernanda Lopez Hernández");
+        c.setTelefono("291-342-042");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Luis Eduardo Gomez Sanchez");
+        c.setTelefono("383-710-952");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Ana Sofía Ramirez Lopez");
+        c.setTelefono("512-401-884");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Carlos Juan Perez Hernández");
+        c.setTelefono("202-118-763");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Laura Beatriz Sanchez Garcia");
+        c.setTelefono("607-345-028");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Alejandro Luis Martinez Ramirez");
+        c.setTelefono("814-509-647");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Sofia Camila Gomez Figueroa");
+        c.setTelefono("701-230-111");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Miguel Fernando Quiroz Perez");
+        c.setTelefono("930-457-983");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Lucia Valeria Sanchez Lopez");
+        c.setTelefono("319-602-456");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Oscar Alejandro Garcia Ramirez");
+        c.setTelefono("485-802-311");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Isabel Andrea Martinez Gomez");
+        c.setTelefono("712-394-521");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Carlos Juan Figueroa Gomez");
+        c.setTelefono("514-906-214");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Paula Elena Lopez Sanchez");
+        c.setTelefono("825-402-768");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Juan Eduardo Quiroz Perez");
+        c.setTelefono("649-528-903");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Gabriela Daniela Ramirez Hernández");
+        c.setTelefono("935-284-112");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Miguel Alejandro Martinez Gomez");
+        c.setTelefono("208-601-339");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Emilia Regina Sanchez Figueroa");
+        c.setTelefono("401-731-908");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Oscar Eduardo Garcia Lopez");
+        c.setTelefono("602-894-765");
+        lista.add(c);
+
+        c = new ClienteDTO();
+        c.setNombreCompleto("Julieta Miranda Ramirez Hernandez");
+        c.setTelefono("807-315-542");
+        lista.add(c);
+
+        try {
+            this.clientesBO.insercionMasivaClientes(lista);
+            //System.out.println("[!] Se agregaron los clientes correctamente...");
+            JOptionPane.showMessageDialog(
+                this,
+                "Se agregaron los clientes correctamente.",
+                "Insercion Masiva", 
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        } catch (BOException ex) {
+            JOptionPane.showMessageDialog(
+                this,
+                "No se pudo conectar con la base de datos debido a un error, porfavor intentelo de nuevo más tarde.",
+                "Error - Insercion Masiva", 
+                JOptionPane.ERROR_MESSAGE
+            );
+        }
     }//GEN-LAST:event_menuClientesInsercionMasivaActionPerformed
 
     private void actualizarInformacionRestauranteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarInformacionRestauranteBtnActionPerformed
@@ -312,13 +455,13 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         System.out.println("Botón presionado");
 
         this.actualizarInformacionRestaurante();
-        
+
         try {
             this.restaurantesBO.actualizarRestaurante(restaurante);
         } catch (BOException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         // Crear un temporizador que habilita el botón después de un tiempo
         this.timerActualizarInfoRestaurante = new Timer();
         this.timerActualizarInfoRestaurante.schedule(new TimerTask() {
@@ -356,7 +499,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
             if (telefono == null || telefono.trim().isEmpty()) {
                 throw new IllegalArgumentException("El teléfono del restaurante no puede estar vacío.");
             }
-            
+
             restaurante.setDireccion(direccion);
             restaurante.setTelefono(telefono);
             restaurante.setHoraCierre(horaCierre);
