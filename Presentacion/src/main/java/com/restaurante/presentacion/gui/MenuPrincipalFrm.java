@@ -50,17 +50,9 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         FlatLightLaf.setup();
         initComponents();
         this.setLocationRelativeTo(null);
+        this.setTitle("Menu Principal");
         //Estilo.prepararEstilo();
         this.cargarInfoRestaurante();
-
-        /*
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(() -> {
-            
-            System.out.println("[!] Se cargaron las mesas...");
-        });
-        executor.shutdown();
-*/
         this.cargarMesasDisponibles();
     }
 
@@ -229,6 +221,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         mesasGraTerrazaLbl = new javax.swing.JLabel();
         mesasGraVentanaLbl = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        actualizarMesasDisponibles = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuMesasAdministrar = new javax.swing.JMenuItem();
@@ -505,11 +498,18 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel19)
                     .addComponent(mesasGraVentanaLbl))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setText("Mesas Disponibles");
+
+        actualizarMesasDisponibles.setText("Actualizar Disponibles");
+        actualizarMesasDisponibles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarMesasDisponiblesActionPerformed(evt);
+            }
+        });
 
         jMenu1.setText("Mesas");
 
@@ -590,7 +590,10 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(actualizarMesasDisponibles)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -599,10 +602,12 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(actualizarMesasDisponibles)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -611,7 +616,9 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
 
     private void menuMesasAdministrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMesasAdministrarActionPerformed
 
-
+        AdminMesasFrm adminMesas = new AdminMesasFrm();
+        adminMesas.setVisible(true);
+        
     }//GEN-LAST:event_menuMesasAdministrarActionPerformed
 
     private void menuReservacionCancelarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservacionCancelarReservacionActionPerformed
@@ -800,6 +807,10 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         }, 5000);  // Esperar 2000 milisegundos (2 segundos)
     }//GEN-LAST:event_actualizarInformacionRestauranteBtnActionPerformed
 
+    private void actualizarMesasDisponiblesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarMesasDisponiblesActionPerformed
+        this.cargarMesasDisponibles();
+    }//GEN-LAST:event_actualizarMesasDisponiblesActionPerformed
+
     private void actualizarInformacionRestaurante() {
         LocalTime horaApertura = this.horaAperturaTimePicker.getTime();
         LocalTime horaCierre = this.horaCierreTimePicker.getTime();
@@ -850,6 +861,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton actualizarInformacionRestauranteBtn;
+    private javax.swing.JButton actualizarMesasDisponibles;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField direccionRestauranteTextField;
     private javax.swing.Box.Filler filler1;

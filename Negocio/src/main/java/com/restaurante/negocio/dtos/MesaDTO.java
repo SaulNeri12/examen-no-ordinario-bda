@@ -6,6 +6,7 @@
 package com.restaurante.negocio.dtos;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 
 /**
@@ -29,6 +30,11 @@ public class MesaDTO implements Serializable {
 
     /** El restaurante al cual pertenece la mesa. */
     private RestauranteDTO restaurante;
+    
+    /**
+     * La fecha en que estara disponible nuevamente.
+     */
+    private LocalDateTime fechaNuevaDisponibilidad;
 
     /**
      * Constructor por defecto que inicializa una nueva instancia de MesaDTO.
@@ -172,5 +178,19 @@ public class MesaDTO implements Serializable {
     @Override
     public String toString() {
         return "MesaDTO[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the fechaNuevaDisponibilidad
+     */
+    public LocalDateTime getFechaNuevaDisponibilidad() {
+        return fechaNuevaDisponibilidad;
+    }
+
+    /**
+     * @param fechaNuevaDisponibilidad the fechaNuevaDisponibilidad to set
+     */
+    public void setFechaNuevaDisponibilidad(LocalDateTime fechaNuevaDisponibilidad) {
+        this.fechaNuevaDisponibilidad = fechaNuevaDisponibilidad;
     }
 }
