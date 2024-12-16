@@ -650,7 +650,8 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuReservacionCancelarReservacionActionPerformed
 
     private void menuReservacionesHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservacionesHistorialActionPerformed
-        // TODO add your handling code here:
+        HistorialReservacionesFrm frm = new HistorialReservacionesFrm();
+        frm.setVisible(true);
     }//GEN-LAST:event_menuReservacionesHistorialActionPerformed
 
     private void menuReservacionesAgregarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservacionesAgregarReservacionActionPerformed
