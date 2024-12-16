@@ -229,6 +229,7 @@ public class HistorialReservacionesFrm extends javax.swing.JFrame {
             model.addColumn("Tel. Cliente");
             model.addColumn("Estado");
             model.addColumn("Ubicación Mesa");
+            model.addColumn("Total");
             model.addColumn("Fecha Reserva");
             model.addColumn("Fecha Registro");
 
@@ -241,6 +242,7 @@ public class HistorialReservacionesFrm extends javax.swing.JFrame {
                     r.getCliente().getTelefono(),
                     r.getEstado().toString(),
                     r.getMesa().getUbicacion().toString(),
+                    r.getMontoTotal(),
                     r.getFechaHora(),
                     r.getFechaHoraRegistro()
                 });
