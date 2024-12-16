@@ -53,13 +53,15 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         //Estilo.prepararEstilo();
         this.cargarInfoRestaurante();
 
+        /*
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(() -> {
-            this.cargarMesasDisponibles();
+            
             System.out.println("[!] Se cargaron las mesas...");
         });
         executor.shutdown();
-
+*/
+        this.cargarMesasDisponibles();
     }
 
     private void cargarInfoRestaurante() {
@@ -163,9 +165,11 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
             this.mesasGraVentanaLbl.setText(Integer.toString(mesasGraVentana.size()));
 
         } catch (BOException ex) {
+            System.out.println("### " + ex.getMessage());
             JOptionPane.showMessageDialog(
                     this,
-                    "No se pudo obtener la informacion de las mesas en la base de datos.",
+                    //"No se pudo obtener la informacion de las mesas en la base de datos.",
+                    ex.getMessage(),
                     "Error - Carga de mesas disponibles",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -632,9 +636,11 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
         try {
             clientesRegistrados = this.clientesBO.obtenerClientesTodos().size() > 0;
         } catch (BOException ex) {
+            System.out.println("### " + ex.getMessage());
             JOptionPane.showMessageDialog(
                     this,
-                    "No se pudo conectar con la base de datos debido a un error, porfavor intentelo de nuevo más tarde.",
+                    //"No se pudo conectar con la base de datos debido a un error, porfavor intentelo de nuevo más tarde.",
+                    ex.getMessage(),
                     "Error - Insercion Masiva",
                     JOptionPane.ERROR_MESSAGE
             );
@@ -758,6 +764,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
                     JOptionPane.INFORMATION_MESSAGE
             );
         } catch (BOException ex) {
+            System.out.println("### " + ex.getMessage());
             JOptionPane.showMessageDialog(
                     this,
                     "No se pudo conectar con la base de datos debido a un error, porfavor intentelo de nuevo más tarde.",
@@ -836,10 +843,7 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }
 
     private boolean validarTelefono(String telefono) {
-        // Expresión regular para validar el número de teléfono
         String regex = "^\\d{8,15}(-\\d+)*$";
-
-        // Validar con la expresión regular
         return telefono != null && telefono.matches(regex);
     }
 
