@@ -207,12 +207,9 @@ class MesasDAO implements IMesasDAO {
             query.setParameter("idRestaurante", idRestaurante);
             query.setParameter("fechaActual", fechaActual);
 
-            // Impresión de depuración
-            System.out.println("ID del Restaurante: " + idRestaurante);
-            System.out.println("Fecha actual para comparación: " + fechaActual);
 
             List<Mesa> mesasDisponibles = query.getResultList();
-            System.out.println("Mesas disponibles encontradas: " + mesasDisponibles.size());
+            
 
             return mesasDisponibles;
         } catch (NoResultException e) {
