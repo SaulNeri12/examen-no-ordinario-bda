@@ -4,9 +4,19 @@
  */
 package com.restaurante.presentacion.gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
-
-
+import com.restaurante.negocio.bo.implementaciones.FabricaRestaurantesBO;
+import com.restaurante.negocio.bo.interfaces.IRestaurantesBO;
+import com.restaurante.negocio.dtos.RestauranteDTO;
+import com.restaurante.negocio.excepciones.BOException;
+import java.awt.Color;
+import java.time.LocalTime;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,12 +24,28 @@ import com.formdev.flatlaf.FlatLightLaf;
  */
 public class MenuPrincipalFrm extends javax.swing.JFrame {
 
+    private RestauranteDTO restaurante = InformacionRestaurante.getInstance().getRestaurante();
+    private IRestaurantesBO restaurantesBO = FabricaRestaurantesBO.obtenerRestaurantesBO();
+
+    private Timer timerActualizarInfoRestaurante;
+
     /**
      * Creates new form MenuPrincipalFrm
      */
     public MenuPrincipalFrm() {
+        this.getContentPane().setBackground(Color.WHITE);
         FlatLightLaf.setup();
-        initComponents();  
+        initComponents();
+        //Estilo.prepararEstilo();
+        this.cargarInfoRestaurante();
+    }
+
+    private void cargarInfoRestaurante() {
+
+        this.direccionRestauranteTextField.setText(restaurante.getDireccion());
+        this.horaAperturaTimePicker.setTime(restaurante.getHoraApertura());
+        this.horaCierreTimePicker.setTime(restaurante.getHoraCierre());
+        this.telefonoRestauranteTextField.setText(restaurante.getTelefono());
     }
 
     /**
@@ -32,104 +58,343 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jRadioButton1 = new javax.swing.JRadioButton();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        direccionRestauranteTextField = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        telefonoRestauranteTextField = new javax.swing.JTextField();
+        actualizarInformacionRestauranteBtn = new javax.swing.JButton();
+        horaAperturaTimePicker = new com.github.lgooddatepicker.components.TimePicker();
+        horaCierreTimePicker = new com.github.lgooddatepicker.components.TimePicker();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        menuMesasAdministrar = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        menuReservacionesHistorial = new javax.swing.JMenuItem();
+        menuReservacionCancelarReservacion = new javax.swing.JMenuItem();
+        menuReservacionesAgregarReservacion = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        menuClientesInsercionMasiva = new javax.swing.JMenuItem();
+        jMenu6 = new javax.swing.JMenu();
+
+        jMenuItem1.setText("jMenuItem1");
+
+        jMenu3.setText("jMenu3");
+
+        jMenu4.setText("jMenu4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("jButton1");
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setText("Dirección:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setText("Horario");
 
-        jCheckBox1.setText("jCheckBox1");
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        jLabel3.setText("Apertura:");
 
-        jRadioButton1.setText("jRadioButton1");
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        jLabel4.setText("Cierre:");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setText("Teléfono:");
+
+        actualizarInformacionRestauranteBtn.setText("Actualizar Información");
+        actualizarInformacionRestauranteBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                actualizarInformacionRestauranteBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(direccionRestauranteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel5)
+                    .addComponent(telefonoRestauranteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jLabel3)
+                        .addComponent(jLabel2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(horaAperturaTimePicker, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                            .addComponent(horaCierreTimePicker, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(33, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(actualizarInformacionRestauranteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(94, 94, 94))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(direccionRestauranteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(horaAperturaTimePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(horaCierreTimePicker, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(telefonoRestauranteTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addComponent(actualizarInformacionRestauranteBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(149, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 516, Short.MAX_VALUE)
+        );
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setText("Mesas Disponibles");
+
+        jMenu1.setText("Mesas");
+
+        menuMesasAdministrar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuMesasAdministrar.setText("Administrar");
+        menuMesasAdministrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuMesasAdministrarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(menuMesasAdministrar);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Reservaciones");
+
+        menuReservacionesHistorial.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_H, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuReservacionesHistorial.setText("Historial");
+        menuReservacionesHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuReservacionesHistorialActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuReservacionesHistorial);
+
+        menuReservacionCancelarReservacion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuReservacionCancelarReservacion.setText("Cancelar Reservación");
+        menuReservacionCancelarReservacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuReservacionCancelarReservacionActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuReservacionCancelarReservacion);
+
+        menuReservacionesAgregarReservacion.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuReservacionesAgregarReservacion.setText("Agregar Reservación");
+        menuReservacionesAgregarReservacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuReservacionesAgregarReservacionActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuReservacionesAgregarReservacion);
+
+        jMenuBar1.add(jMenu2);
+
+        jMenu5.setText("Clientes");
+        jMenu5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu5ActionPerformed(evt);
+            }
+        });
+
+        menuClientesInsercionMasiva.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.SHIFT_DOWN_MASK | java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuClientesInsercionMasiva.setText("Inserción Masiva");
+        menuClientesInsercionMasiva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuClientesInsercionMasivaActionPerformed(evt);
+            }
+        });
+        jMenu5.add(menuClientesInsercionMasiva);
+
+        jMenuBar1.add(jMenu5);
+
+        jMenu6.setText("Acerca De");
+        jMenuBar1.add(jMenu6);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jCheckBox1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(66, 66, 66)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(95, 95, 95)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-                .addComponent(jRadioButton1)
-                .addGap(56, 56, 56))
+                .addGap(20, 20, 20)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(0, 422, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(57, 57, 57)
-                .addComponent(jCheckBox1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addComponent(jRadioButton1)
-                        .addGap(40, 40, 40)))
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuPrincipalFrm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void menuMesasAdministrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMesasAdministrarActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
+
+    }//GEN-LAST:event_menuMesasAdministrarActionPerformed
+
+    private void menuReservacionCancelarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservacionCancelarReservacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuReservacionCancelarReservacionActionPerformed
+
+    private void menuReservacionesHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservacionesHistorialActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuReservacionesHistorialActionPerformed
+
+    private void menuReservacionesAgregarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservacionesAgregarReservacionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuReservacionesAgregarReservacionActionPerformed
+
+    private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu5ActionPerformed
+
+    private void menuClientesInsercionMasivaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuClientesInsercionMasivaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuClientesInsercionMasivaActionPerformed
+
+    private void actualizarInformacionRestauranteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_actualizarInformacionRestauranteBtnActionPerformed
+        // Deshabilitar el botón
+        this.actualizarInformacionRestauranteBtn.setEnabled(false);
+
+        // Acción que se ejecuta cuando el botón es presionado
+        System.out.println("Botón presionado");
+
+        this.actualizarInformacionRestaurante();
+        
+        try {
+            this.restaurantesBO.actualizarRestaurante(restaurante);
+        } catch (BOException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        // Crear un temporizador que habilita el botón después de un tiempo
+        this.timerActualizarInfoRestaurante = new Timer();
+        this.timerActualizarInfoRestaurante.schedule(new TimerTask() {
+            @Override
             public void run() {
-                new MenuPrincipalFrm().setVisible(true);
+                // Habilitar el botón después de 2 segundos
+                actualizarInformacionRestauranteBtn.setEnabled(true);
             }
-        });
+        }, 5000);  // Esperar 2000 milisegundos (2 segundos)
+    }//GEN-LAST:event_actualizarInformacionRestauranteBtnActionPerformed
+
+    private void actualizarInformacionRestaurante() {
+        LocalTime horaApertura = this.horaAperturaTimePicker.getTime();
+        LocalTime horaCierre = this.horaCierreTimePicker.getTime();
+        String direccion = this.direccionRestauranteTextField.getText();
+        String telefono = this.telefonoRestauranteTextField.getText();
+
+        try {
+            if (horaApertura == null) {
+                throw new IllegalArgumentException("No se especificó la hora de apertura.");
+            }
+
+            if (horaCierre == null) {
+                throw new IllegalArgumentException("No se especificó la hora de cierre.");
+            }
+
+            if (horaApertura.isAfter(horaCierre)) {
+                throw new IllegalArgumentException("La hora de apertura no puede ser posterior a la hora de cierre.");
+            }
+
+            if (direccion == null || direccion.trim().isEmpty()) {
+                throw new IllegalArgumentException("La dirección del restaurante no puede estar vacía.");
+            }
+
+            if (telefono == null || telefono.trim().isEmpty()) {
+                throw new IllegalArgumentException("El teléfono del restaurante no puede estar vacío.");
+            }
+            
+            restaurante.setDireccion(direccion);
+            restaurante.setTelefono(telefono);
+            restaurante.setHoraCierre(horaCierre);
+            restaurante.setHoraApertura(horaApertura);
+
+        } catch (IllegalArgumentException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton actualizarInformacionRestauranteBtn;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextField direccionRestauranteTextField;
+    private com.github.lgooddatepicker.components.TimePicker horaAperturaTimePicker;
+    private com.github.lgooddatepicker.components.TimePicker horaCierreTimePicker;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JMenuItem menuClientesInsercionMasiva;
+    private javax.swing.JMenuItem menuMesasAdministrar;
+    private javax.swing.JMenuItem menuReservacionCancelarReservacion;
+    private javax.swing.JMenuItem menuReservacionesAgregarReservacion;
+    private javax.swing.JMenuItem menuReservacionesHistorial;
+    private javax.swing.JTextField telefonoRestauranteTextField;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,7 +5,6 @@
 
 module Presentacion {
     requires Negocio;
-    requires Persistencia;
     requires mysql.connector.j;
     requires com.google.protobuf;
     requires org.eclipse.persistence.core;
@@ -18,4 +17,6 @@ module Presentacion {
     requires java.desktop;
     requires java.logging;
     requires com.formdev.flatlaf;
+    requires com.github.lgooddatepicker;
+    
 }

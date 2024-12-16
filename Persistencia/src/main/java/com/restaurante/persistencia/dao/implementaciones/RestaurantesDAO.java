@@ -74,7 +74,6 @@ class RestaurantesDAO implements IRestaurantesDAO {
         } catch (NoResultException e) {
             throw new DAOException("No se encontro al restaurante con el numero de telefono dado [telefono: %s]".formatted(numeroTelefono));
         } catch (Exception e) {
-            System.out.println("ERROR CONSULTA TELEFONO(%s): %s".formatted(e.getClass().getSimpleName(), e.getMessage()));
             throw new DAOException("Error al obtener el restaurante por número de teléfono");
         } finally {
             entityManager.close();
