@@ -42,6 +42,15 @@ public interface IMesasBO {
     public List<MesaDTO> obtenerMesasPorTipo(Long idRestaurante, TipoMesaDTO tipo) throws BOException;
     
     /**
+     * Obtiene la mesa con el codigo especificado en el restaurante dado.
+     * @param idRestaurante ID del restaurante al cual pertenece la mesa.
+     * @param codigo Codigo de la mesa a buscar.
+     * @return MesaDTO
+     * @throws BOException Si ocurre un error en la consulta.
+     */
+    public MesaDTO obtenerMesaPorCodigo(Long idRestaurante, String codigo) throws BOException;
+    
+    /**
      * Inserta de manera "masiva" el numero dado de mesas con el tipo y
      * ubicacion especifica.
      * @param idRestautante ID del restaurante donde se agregaran las mesas

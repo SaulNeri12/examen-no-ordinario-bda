@@ -234,4 +234,27 @@ class MesasDAO implements IMesasDAO {
         codigoMesa = String.format("%3s-%d-%03d", ubicacion.toString().substring(0, 3), tipo.getMaximoPersonas(), numeroRandom);
         return codigoMesa;
     }
+
+    @Override
+    public Mesa obtenerMesaPorCodigo(Long idRestaurante, String codigo) throws DAOException {
+        EntityManager entityManager = Conexion.getInstance().crearConexion();
+
+        try {
+            Mesa mesa = entityManager.createQuery(
+                    "SELECT m FROM Mesa m WHERE m.restaurante.id = :idRestaurante AND m.codigo = :codigo",
+                    Mesa.class
+            )
+            .setParameter("idRestaurante", idRestaurante)
+            .setParameter("codigo", codigo)
+            .getSingleResult();
+             
+            return mesa;
+        } catch (NoResultException ex) {
+            return null;
+        } catch (Exception e) {
+            throw new DAOException("Error al obtener todas las mesas");
+        } finally {
+            entityManager.close(); 
+        }
+    }
 }

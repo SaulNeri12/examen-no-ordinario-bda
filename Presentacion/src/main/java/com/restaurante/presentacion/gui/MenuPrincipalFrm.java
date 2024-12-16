@@ -23,10 +23,6 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -630,7 +626,8 @@ public class MenuPrincipalFrm extends javax.swing.JFrame {
     }//GEN-LAST:event_menuReservacionesHistorialActionPerformed
 
     private void menuReservacionesAgregarReservacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservacionesAgregarReservacionActionPerformed
-        // TODO add your handling code here:
+        CrearReservacionFrm crearReservacionFrm = new CrearReservacionFrm();
+        crearReservacionFrm.setVisible(true);
     }//GEN-LAST:event_menuReservacionesAgregarReservacionActionPerformed
 
     private void jMenu5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu5ActionPerformed
